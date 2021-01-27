@@ -3,3 +3,4 @@ apt install libmariadb-dev-compat
 pip3 install mariadb
 pip3 install tabulate
 
+cp example.config.ini config.ini
