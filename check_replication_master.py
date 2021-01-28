@@ -4,6 +4,14 @@ import sys
 from tabulate import tabulate
 import configparser
 
+
+
+
+def query_dump(cursor, query):
+    cursor.execute(query)
+    return "    " + query + "\n" + tabulate(cursor.fetchall(), tablefmt='psql')
+
+
 config = configparser.ConfigParser()
 config.read("config.ini")
 
@@ -26,8 +34,12 @@ cur = conn.cursor()
 
 ideals = {
     "log_bin": "ON",
+    "binlog_do_db": "[database names]",
+    "binlog_format": "ROW",
+    "log_slave_updates": "ON",
     "version_comment": "Ubuntu 20.04",
-    "server_id": "1"
+    "server_id": "[UNIQUE FOR EACH SERVER.  IP?]",
+    "skip_networking": "OFF"
 }
 
 correct = 0
@@ -37,6 +49,11 @@ for name in ideals:
 
     cur.execute("SHOW VARIABLES LIKE '%s'" % (name) )
     myresult = cur.fetchall()
+
+    if len(myresult) == 0:
+        print(name, "was not found.")
+        continue
+
     myresult[0] = myresult[0] + (ideals[name], )
 
     if ideals[name] == myresult[0][1]:
@@ -47,3 +64,10 @@ for name in ideals:
 
 
 print(correct, "settings are correctly configured. ")
+
+
+# if input("Do you want to start this as master?") == 'y':
+#    cur.execute("START MASTER")
+
+print(query_dump(cur, "SHOW MASTER STATUS"))
+print(query_dump(cur, "SHOW PROCESSLIST"))

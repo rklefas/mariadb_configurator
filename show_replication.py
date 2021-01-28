@@ -14,9 +14,7 @@ try:
         user=config['LOGIN']['user'],
         password=config['LOGIN']['password'],
         host=config['LOGIN']['host'],
-        port=3306,
-        database="mysql"
-
+        port=3306
     )
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")
@@ -25,7 +23,12 @@ except mariadb.Error as e:
 # Get Cursor
 cur = conn.cursor()
 
-cur.execute("SHOW VARIABLES LIKE '%repl%'")
+cur.execute("""SHOW VARIABLES WHERE variable_name LIKE '%repl%' 
+OR variable_name LIKE 'wsrep%' 
+OR variable_name LIKE '%binlog%' 
+OR variable_name LIKE 'log_bin_%'
+OR variable_name LIKE 'gtid_%'
+""")
 myresult = cur.fetchall()
 
 print(tabulate(myresult, headers=['Name', 'Value'], tablefmt='psql'))
