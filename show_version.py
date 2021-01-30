@@ -14,9 +14,7 @@ try:
         user=config['LOGIN']['user'],
         password=config['LOGIN']['password'],
         host=config['LOGIN']['host'],
-        port=3306,
-        database="mysql"
-
+        port=3306
     )
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")
