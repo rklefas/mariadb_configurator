@@ -19,10 +19,10 @@ config.read("config.ini")
 # Connect to MariaDB Platform
 try:
     conn = mariadb.connect(
-        user=config['LOGIN']['user'],
-        password=config['LOGIN']['password'],
-        host=config['LOGIN']['host'],
-        port=3306
+        user=config['MASTER']['user'],
+        password=config['MASTER']['password'],
+        host=config['MASTER']['host'],
+        port=int(config['MASTER']['port'])
     )
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")
