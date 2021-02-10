@@ -3,13 +3,8 @@ import mariadb
 import sys
 from tabulate import tabulate
 import configparser
+import configurator
 
-
-
-
-def query_dump(cursor, query):
-    cursor.execute(query)
-    return "    " + query + "\n" + tabulate(cursor.fetchall(), tablefmt='psql')
 
 
 config = configparser.ConfigParser()
@@ -69,5 +64,5 @@ print(correct, "settings are correctly configured. ")
 # if input("Do you want to start this as master?") == 'y':
 #    cur.execute("START MASTER")
 
-print(query_dump(cur, "SHOW MASTER STATUS"))
-print(query_dump(cur, "SHOW PROCESSLIST"))
+print(configurator.query_dump(cur, "SHOW MASTER STATUS"))
+print(configurator.query_dump(cur, "SHOW PROCESSLIST"))

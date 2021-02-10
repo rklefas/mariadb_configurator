@@ -42,23 +42,12 @@ ideals = {
     "skip_networking": "OFF"
 }
 
-# cur.execute("INSERT INTO sample VALUES (%d, %s, %s)",
-#    (2, 'A "string" with double quotes.', '2020-01-02'))
-
-# print(config['SLAVE']['host'])
-# sys.exit()
-
-params = (config['SLAVE']['host'], config['SLAVE']['user'], config['SLAVE']['password'], int(config['SLAVE']['port']) )
-
-# params = (config['SLAVE']['host'])
-
-print(params)
 
 cur.execute("STOP SLAVE")
 
 
+params = (config['SLAVE']['host'], config['SLAVE']['user'], config['SLAVE']['password'], int(config['SLAVE']['port']) )
 masterQuery = "CHANGE MASTER TO MASTER_HOST = '%s' , MASTER_USER = '%s' , MASTER_PASSWORD = '%s' , MASTER_PORT = %d" % params
-# masterQuery = "CHANGE MASTER TO MASTER_HOST = '%s'" % params
 
 print(masterQuery)
 

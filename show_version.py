@@ -3,6 +3,7 @@ import mariadb
 import sys
 from tabulate import tabulate
 import configparser
+import configurator
 
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -33,14 +34,14 @@ except mariadb.Error as e:
         print("- Ensure the server is accessiible with the bind-address config option.")
         print("- Restart server:  /etc/init.d/mysql restart")
     elif str(e).startswith("Access denied for user"):
-        print("1) Ensure the connection credentials in config.ini are correct. ")
+        print("- Ensure the connection credentials in config.ini are correct. ")
     print("")
     sys.exit(1)
+
 
 # Get Cursor
 cur = conn.cursor()
 
-cur.execute("SHOW VARIABLES LIKE '%version%'")
-myresult = cur.fetchall()
+print(configurator.query_dump(cur, "SHOW GRANTS"))
 
-print(tabulate(myresult, headers=['Name', 'Value'], tablefmt='psql'))
+print(configurator.query_dump(cur, "SHOW VARIABLES LIKE '%version%'"))

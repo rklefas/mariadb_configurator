@@ -3,33 +3,8 @@ import mariadb
 import sys
 from tabulate import tabulate
 import configparser
+import configurator
 
-
-
-
-def query_dump(cursor, query):
-    cursor.execute(query)
-
-    headersAll = []
-
-    for column in cursor.description:
-        column_name = column[0]
-        headersAll.append(column_name)
-
-    return "    " + query + "\n" + tabulate(cursor.fetchall(), headers = headersAll, tablefmt='psql')
-
-
-def query_dump_vertical(cursor, query):
-    cursor.execute(query)
-    result = cursor.fetchall()
-
-    print(cursor.description)
-#    print(mariadb.fieldinfo())
-
-#    print(dir(cursor))
-
-    for column in result[0]:
-        print(column)
 
 
 
@@ -88,8 +63,5 @@ for name in ideals:
 print(correct, "settings are correctly configured. ")
 
 
-# if input("Do you want to start this as master?") == 'y':
-#    cur.execute("START MASTER")
-
-print(query_dump_vertical(cur, "SHOW SLAVE STATUS"))
-print(query_dump(cur, "SHOW PROCESSLIST"))
+print(configurator.query_dump_vertical(cur, "SHOW SLAVE STATUS"))
+# print(configurator.query_dump(cur, "SHOW PROCESSLIST"))
