@@ -1,5 +1,7 @@
 from tabulate import tabulate
 
+import textwrap
+
 
 def get_server_type():
 
@@ -43,7 +45,7 @@ def query_dump_vertical(cursor, query):
     lineAll = []
 
     for column in result[0]:
-        lineAll.append( (colNum + 1, headersAll[colNum], column, ) )
+        lineAll.append( (colNum + 1, headersAll[colNum], textwrap.fill(str(column), 60), ) )
         colNum += 1
 		
     displayHeaders = ["Column #", "Column Name", "Row #1 Value"]

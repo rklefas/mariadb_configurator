@@ -30,10 +30,10 @@ cur = conn.cursor()
 ideals = {
     "log_bin": "ON",
     "binlog_do_db": "[database names]",
-    "binlog_format": "ROW",
-    "log_slave_updates": "ON",
-    "version_comment": "Ubuntu 20.04",
-    "server_id": "[UNIQUE FOR EACH SERVER.  IP?]",
+#    "binlog_format": "ROW",
+#    "log_slave_updates": "ON",
+#    "version_comment": "Ubuntu 20.04",
+    "server_id": "10",
     "skip_networking": "OFF"
 }
 
@@ -58,11 +58,14 @@ for name in ideals:
     print(tabulate(myresult, headers=['Name', 'Value', 'Expected'], tablefmt='psql'))
 
 
-print(correct, "settings are correctly configured. ")
+# print(correct, "settings are correctly configured. ")
 
 
 # if input("Do you want to start this as master?") == 'y':
 #    cur.execute("START MASTER")
 
 print(configurator.query_dump(cur, "SHOW MASTER STATUS"))
-print(configurator.query_dump(cur, "SHOW PROCESSLIST"))
+print(configurator.query_dump(cur, "SHOW BINARY LOGS"))
+print(configurator.query_dump(cur, "SHOW BINLOG EVENTS LIMIT 20"))
+print(configurator.query_dump(cur, "SHOW SLAVE HOSTS"))
+

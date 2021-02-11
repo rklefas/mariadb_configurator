@@ -64,4 +64,4 @@ print(correct, "settings are correctly configured. ")
 
 
 print(configurator.query_dump_vertical(cur, "SHOW SLAVE STATUS"))
-# print(configurator.query_dump(cur, "SHOW PROCESSLIST"))
+print(configurator.query_dump(cur, "SHOW RELAYLOG EVENTS LIMIT 20"))

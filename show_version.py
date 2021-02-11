@@ -29,6 +29,7 @@ except mariadb.Error as e:
         print("- Restart server:  /etc/init.d/mysql restart")
     elif str(e).startswith("Access denied for user"):
         print("- Ensure the connection credentials in config.ini are correct. ")
+        print("- Ensure the privleges are granted with replication_user.sql ")
     print("")
     sys.exit(1)
 

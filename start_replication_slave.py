@@ -1,15 +1,8 @@
 # Module Imports
 import mariadb
 import sys
-from tabulate import tabulate
 import configparser
 
-
-
-
-def query_dump(cursor, query):
-    cursor.execute(query)
-    return "    " + query + "\n" + tabulate(cursor.fetchall(), tablefmt='psql')
 
 
 config = configparser.ConfigParser()
@@ -31,22 +24,9 @@ except mariadb.Error as e:
 # Get Cursor
 cur = conn.cursor()
 
-
-ideals = {
-    "log_bin": "ON",
-    "binlog_do_db": "[database names]",
-    "binlog_format": "ROW",
-    "log_slave_updates": "ON",
-    "version_comment": "Ubuntu 20.04",
-    "server_id": "[UNIQUE FOR EACH SERVER.  IP?]",
-    "skip_networking": "OFF"
-}
-
-
 cur.execute("STOP SLAVE")
 
-
-params = (config['SLAVE']['host'], config['SLAVE']['user'], config['SLAVE']['password'], int(config['SLAVE']['port']) )
+params = (config['MASTER']['host'], config['MASTER']['user'], config['MASTER']['password'], int(config['MASTER']['port']) )
 masterQuery = "CHANGE MASTER TO MASTER_HOST = '%s' , MASTER_USER = '%s' , MASTER_PASSWORD = '%s' , MASTER_PORT = %d" % params
 
 print(masterQuery)
@@ -54,4 +34,3 @@ print(masterQuery)
 cur.execute(masterQuery)
 cur.execute("START SLAVE")
 
-# print(query_dump(cur, "SHOW PROCESSLIST"))
