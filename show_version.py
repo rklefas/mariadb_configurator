@@ -8,13 +8,7 @@ import configurator
 config = configparser.ConfigParser()
 config.read("config.ini")
 
-server = input("Read (M)ASTER or (S)LAVE server? ")
-server = server.upper()
-
-if server == "M":
-    server = "MASTER"
-elif server == "S":
-    server = "SLAVE"
+server = configurator.get_server_type()
 
 
 # Connect to MariaDB Platform
