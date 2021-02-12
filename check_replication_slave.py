@@ -30,16 +30,13 @@ cur = conn.cursor()
 
 
 ideals = {
-    "log_bin": "ON",
-    "binlog_do_db": "[database names]",
     "binlog_format": "MIXED",
     "log_slave_updates": "OFF",
-    "version_comment": "Ubuntu 20.04",
     "server_id": "20",
     "skip_networking": "OFF"
 }
 
-correct = 0
+incorrect = 0
 
 
 for name in ideals:
@@ -54,14 +51,14 @@ for name in ideals:
     myresult[0] = myresult[0] + (ideals[name], )
 
     if ideals[name] == myresult[0][1]:
-        correct += 1
         continue
+    else:
+        incorrect += 1
 
     print(tabulate(myresult, headers=['Name', 'Value', 'Expected'], tablefmt='psql'))
 
 
-print(correct, "settings are correctly configured. ")
 
-
-print(configurator.query_dump_vertical(cur, "SHOW SLAVE STATUS"))
-print(configurator.query_dump(cur, "SHOW RELAYLOG EVENTS LIMIT 20"))
+if incorrect == 0:
+    print(configurator.query_dump_vertical(cur, "SHOW SLAVE STATUS"))
+    print(configurator.query_dump(cur, "SHOW RELAYLOG EVENTS LIMIT 20"))

@@ -37,7 +37,7 @@ ideals = {
     "skip_networking": "OFF"
 }
 
-correct = 0
+incorrect = 0
 
 
 for name in ideals:
@@ -52,20 +52,17 @@ for name in ideals:
     myresult[0] = myresult[0] + (ideals[name], )
 
     if ideals[name] == myresult[0][1]:
-        correct += 1
         continue
+    else:
+        incorrect += 1
 
     print(tabulate(myresult, headers=['Name', 'Value', 'Expected'], tablefmt='psql'))
 
 
-# print(correct, "settings are correctly configured. ")
 
-
-# if input("Do you want to start this as master?") == 'y':
-#    cur.execute("START MASTER")
-
-print(configurator.query_dump(cur, "SHOW MASTER STATUS"))
-print(configurator.query_dump(cur, "SHOW BINARY LOGS"))
-print(configurator.query_dump(cur, "SHOW BINLOG EVENTS LIMIT 20"))
-print(configurator.query_dump(cur, "SHOW SLAVE HOSTS"))
+if incorrect == 0:
+    print(configurator.query_dump(cur, "SHOW MASTER STATUS"))
+    print(configurator.query_dump(cur, "SHOW BINARY LOGS"))
+    print(configurator.query_dump(cur, "SHOW BINLOG EVENTS LIMIT 20"))
+    print(configurator.query_dump(cur, "SHOW SLAVE HOSTS"))
 
