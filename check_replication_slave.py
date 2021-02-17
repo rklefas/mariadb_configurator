@@ -1,32 +1,14 @@
 # Module Imports
-import mariadb
-import sys
 from tabulate import tabulate
 import configparser
 import configurator
 
 
-
-
-
 config = configparser.ConfigParser()
 config.read("config.ini")
 
-
-# Connect to MariaDB Platform
-try:
-    conn = mariadb.connect(
-        user=config['SLAVE']['user'],
-        password=config['SLAVE']['password'],
-        host=config['SLAVE']['host'],
-        port=int(config['SLAVE']['port'])
-    )
-except mariadb.Error as e:
-    print(f"Error connecting to MariaDB Platform: {e}")
-    sys.exit(1)
-
 # Get Cursor
-cur = conn.cursor()
+cur = configurator.get_database_connection( config['SLAVE'] ).cursor()
 
 
 ideals = {
@@ -60,5 +42,5 @@ for name in ideals:
 
 
 if incorrect == 0:
-    print(configurator.query_dump_vertical(cur, "SHOW SLAVE STATUS"))
-    print(configurator.query_dump(cur, "SHOW RELAYLOG EVENTS LIMIT 20"))
+    configurator.control_output(configurator.query_dump_vertical(cur, "SHOW SLAVE STATUS"))
+    configurator.control_output(configurator.query_dump(cur, "SHOW RELAYLOG EVENTS LIMIT 20"))
